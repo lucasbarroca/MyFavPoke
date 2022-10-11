@@ -1,0 +1,7 @@
+{
+  "name": "MyFavPoke",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
