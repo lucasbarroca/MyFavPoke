@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError, delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { NamedAPIResourceList } from '../types/named-apiresource-list';
+import { Pokemon } from '../types/pokemon';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +16,28 @@ export class PokeApiService {
     'Content-Type': 'application/json',
   });
 
+  CachedFullPokemonsList: Observable<NamedAPIResourceList>;
+
   constructor(private httpClient: HttpClient) {}
+
+  getFullPokemonsList() {
+    if (!this.CachedFullPokemonsList) {
+      this.CachedFullPokemonsList = this.getPokemonsList(100000);
+    }
+
+    return this.CachedFullPokemonsList;
+  }
+
+  getPokemonsList(limit: number, offset = 0) {
+    return this.get<NamedAPIResourceList>(
+      `pokemon?limit=${limit}&offset=${offset}`
+    );
+  }
+
+  // Id can be either a number or a name
+  getPokemon(id: string) {
+    return this.get<Pokemon>(`pokemon/${id}`);
+  }
 
   get<type>(endpoint): Observable<type> {
     let url = `${this.apiUrl}/${endpoint}`;
