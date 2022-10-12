@@ -58,8 +58,6 @@ export class Tab2Page implements OnInit {
       this.itemsPerPage * (this.currentPage - 1)
     );
 
-    console.log(nextPokes);
-
     this.pokeList.addPokemons(nextPokes, this.pokemons).then(() => {
       this.infiniteScroll.complete();
 

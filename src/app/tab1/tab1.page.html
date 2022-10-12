@@ -1,5 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-title>
+      <ion-text class="ion-margin-end">Pokédex</ion-text>
+      <ion-badge *ngIf="pokemons.length || nothingFound" color="medium"
+        >{{filteredPokemons?.results?.length ?? 0}}</ion-badge
+      >
+    </ion-title>
 
     <ion-buttons slot="end"
       ><ion-button (click)="toggleSearchBar($event)"

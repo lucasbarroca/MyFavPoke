@@ -1,12 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title slot="start"> Favoritos </ion-title>
-    <ion-title *ngIf="listLoaded" slot="end"
-      ><ion-badge color="medium">{{favoritesTotal}}</ion-badge></ion-title
+    <ion-title slot="start">
+      <ion-text class="ion-margin-end">Favoritos</ion-text>
+      <ion-badge *ngIf="listLoaded" color="medium"
+        >{{favoritesTotal}}</ion-badge
+      ></ion-title
     >
-    <ion-title *ngIf="!listLoaded" slot="end"
-      ><ion-skeleton-text color="medium"></ion-skeleton-text
-    ></ion-title>
   </ion-toolbar>
 </ion-header>
 
