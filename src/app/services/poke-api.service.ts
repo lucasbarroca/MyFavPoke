@@ -16,17 +16,17 @@ export class PokeApiService {
     'Content-Type': 'application/json',
   });
 
-  CachedFullPokemonsList: Observable<NamedAPIResourceList>;
+  cachedFullPokemonsList: Observable<NamedAPIResourceList>;
   cachedPokemonsCount: number;
 
   constructor(private httpClient: HttpClient) {}
 
   getFullPokemonsList() {
-    if (!this.CachedFullPokemonsList) {
-      this.CachedFullPokemonsList = this.getPokemonsList(100000);
+    if (!this.cachedFullPokemonsList) {
+      this.cachedFullPokemonsList = this.getPokemonsList(100000);
     }
 
-    return this.CachedFullPokemonsList;
+    return this.cachedFullPokemonsList;
   }
 
   getPokemonsList(limit: number, offset = 0) {

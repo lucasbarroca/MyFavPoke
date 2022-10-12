@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonInfiniteScroll } from '@ionic/angular';
+import { IonInfiniteScroll, IonSearchbar } from '@ionic/angular';
 import { FavoriteListService } from '../services/favorite-list.service';
 import { PokeApiService } from '../services/poke-api.service';
 import { PokemonListingService } from '../services/pokemon-listing.service';
+import { NamedAPIResourceList } from '../types/named-apiresource-list';
 import { PokemonListItem } from '../types/pokemon-list-item';
 
 @Component({
@@ -12,6 +13,7 @@ import { PokemonListItem } from '../types/pokemon-list-item';
 })
 export class Tab1Page implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonSearchbar) ionSearchBar: IonSearchbar;
 
   constructor(
     private pokeApi: PokeApiService,
@@ -19,8 +21,10 @@ export class Tab1Page implements OnInit {
     private favList: FavoriteListService
   ) {}
 
+  showSearch = false;
+  nothingFound = false;
+  filteredPokemons: NamedAPIResourceList;
   pokemons: PokemonListItem[] = [];
-  pokedexTotal;
   fakePokemons = [];
   itemsPerPage = 12;
   currentPage = 1;
@@ -33,43 +37,52 @@ export class Tab1Page implements OnInit {
   }
 
   ionViewWillEnter() {
-    console.log('Loading pokemons...');
-    this.pokemons = [];
-    this.currentPage = 1;
-    this.loadPokemons();
+    this.reload();
   }
 
   loadPokemons() {
     let maxPages = Math.ceil(
-      this.pokeApi.getPokemonsCount() / this.itemsPerPage
+      this.filteredPokemons.results.length / this.itemsPerPage
     );
 
     if (this.currentPage > maxPages) {
       return;
     }
 
-    this.pokeApi
-      .getPokemonsList(
-        this.itemsPerPage,
-        this.itemsPerPage * (this.currentPage - 1)
-      )
-      .subscribe({
-        next: (data) => {
-          let nextPokes = data.results.map((p) => p.name);
-          this.pokeList.addPokemons(nextPokes, this.pokemons).then(() => {
-            this.infiniteScroll.complete();
+    let limit = this.itemsPerPage;
+    let offset = this.itemsPerPage * (this.currentPage - 1);
 
-            if (this.currentPage >= maxPages) {
-              this.infiniteScroll.disabled = true;
-            } else {
-              this.infiniteScroll.disabled = false;
-            }
+    let nextPokes = this.filteredPokemons.results
+      .slice(offset, offset + limit)
+      .map((p) => p.name);
 
-            this.pokedexTotal = this.pokeApi.getPokemonsCount();
-            console.log('Pokemons loaded');
-          });
-        },
-      });
+    this.pokeList.addPokemons(nextPokes, this.pokemons).then(() => {
+      this.infiniteScroll.complete();
+
+      if (this.currentPage >= maxPages) {
+        this.infiniteScroll.disabled = true;
+      } else {
+        this.infiniteScroll.disabled = false;
+      }
+
+      console.log('Pokemons loaded');
+    });
+  }
+
+  reload() {
+    console.log('Loading pokemons...');
+
+    this.nothingFound = false;
+    this.filteredPokemons = null;
+    this.pokemons = [];
+    this.currentPage = 1;
+
+    this.pokeApi.getFullPokemonsList().subscribe({
+      next: (list) => {
+        this.filteredPokemons = list;
+        this.loadPokemons();
+      },
+    });
   }
 
   loadMore(event) {
@@ -87,5 +100,62 @@ export class Tab1Page implements OnInit {
       this.favList.addFavorite(pokemon.id);
       pokemon.favorite = true;
     }
+  }
+
+  toggleSearchBar(event) {
+    this.showSearch = !this.showSearch;
+
+    if (!this.showSearch) {
+      this.reload();
+    } else {
+      setTimeout(() => {
+        this.ionSearchBar.setFocus();
+      }, 500);
+    }
+  }
+
+  searchBlur(event) {
+    if (!event.target.value) {
+      this.showSearch = false;
+    }
+  }
+
+  async handleSearchChange(event) {
+    const query = event.target.value.toLowerCase();
+    console.log('Searching for', query);
+
+    if (query.length < 1) {
+      this.reload();
+      return;
+    }
+
+    this.nothingFound = false;
+    this.filteredPokemons = null;
+    this.pokemons = [];
+    this.currentPage = 1;
+
+    this.pokeApi.getFullPokemonsList().subscribe({
+      next: (data) => {
+        new Promise((resolve) => {
+          let results = data.results.filter(
+            (p) =>
+              p.name.toLowerCase().indexOf(query) > -1 ||
+              p.url
+                .slice(this.pokeApi.apiUrl.length + 9, p.url.length - 1)
+                .indexOf(query) > -1
+          );
+
+          resolve({ ...data, results: results });
+        }).then((data: NamedAPIResourceList) => {
+          console.log('Search results', data);
+          if (data.results.length < 1) {
+            this.nothingFound = true;
+          }
+
+          this.filteredPokemons = data;
+          this.loadPokemons();
+        });
+      },
+    });
   }
 }

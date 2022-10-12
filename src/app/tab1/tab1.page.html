@@ -1,20 +1,38 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title slot="start"> Pokédex </ion-title>
-    <ion-title *ngIf="pokemons.length" slot="end"
-      ><ion-badge *ngIf="pokedexTotal" color="medium"
-        >{{pokedexTotal}}</ion-badge
-      ></ion-title
-    >
-    <ion-title *ngIf="!pokemons.length" slot="end"
-      ><ion-skeleton-text color="medium"></ion-skeleton-text
-    ></ion-title>
+
+    <ion-buttons slot="end"
+      ><ion-button (click)="toggleSearchBar($event)"
+        ><ion-icon name="search"></ion-icon></ion-button
+    ></ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" [scrollY]="pokemons.length">
+  <!-- Search bar -->
+  <div
+    *ngIf="showSearch"
+    class="ion-padding-start ion-padding-end ion-padding-top"
+  >
+    <ion-searchbar
+      animated="true"
+      placeholder="Pesquisar"
+      [debounce]="1000"
+      (ionChange)="handleSearchChange($event)"
+      (ionBlur)="searchBlur($event)"
+    ></ion-searchbar>
+  </div>
+
+  <!-- Nothing found -->
+  <ion-row *ngIf="nothingFound" class="ion-text-center ion-align-items-start">
+    <ion-col size="12" class="ion-padding">
+      <h1>Nada por aqui.</h1>
+      <p>Não encontramos nenhum resultado para sua pesquisa.</p>
+    </ion-col>
+  </ion-row>
+
   <!-- Results grid -->
-  <ion-grid *ngIf="pokemons.length" fixed="false">
+  <ion-grid *ngIf="pokemons.length && !nothingFound" fixed="false">
     <ion-row>
       <ion-col
         *ngFor="let pokemon of pokemons; let i = index"
@@ -91,7 +109,7 @@
   </ion-grid>
 
   <!-- Skeleton Results grid -->
-  <ion-grid *ngIf="!pokemons.length" fixed="false">
+  <ion-grid *ngIf="!pokemons.length && !nothingFound" fixed="false">
     <ion-row>
       <ion-col
         *ngFor="let fakePokemon of fakePokemons; let i = index"
