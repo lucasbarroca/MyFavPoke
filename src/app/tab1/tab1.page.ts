@@ -116,7 +116,9 @@ export class Tab1Page implements OnInit {
 
   searchBlur(event) {
     if (!event.target.value) {
-      this.showSearch = false;
+      setTimeout(() => {
+        this.showSearch = false;
+      }, 500);
     }
   }
 
