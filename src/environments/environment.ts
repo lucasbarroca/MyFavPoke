@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
 
-  apiRequestsDelay: 0,
+  apiRequestsDelay: 200,
 };
 
 /*

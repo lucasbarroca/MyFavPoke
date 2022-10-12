@@ -19,10 +19,16 @@ export class Tab1Page implements OnInit {
   ) {}
 
   pokemons = this.pokeList.items;
-  itemsPerPage = 5;
+  fakePokemons = [];
+  itemsPerPage = 12;
   currentPage = 1;
 
   ngOnInit(): void {
+    console.log('Creating fake pokemons...');
+    for (let i = 0; i < this.itemsPerPage; i++) {
+      this.fakePokemons.push(i + 1);
+    }
+
     console.log('Loading pokemons...');
     this.loadPokemons();
   }
@@ -38,6 +44,7 @@ export class Tab1Page implements OnInit {
           let nextPokes = data.results.map((p) => p.name);
           this.pokeList.addPokemons(nextPokes).then(() => {
             this.infiniteScroll.complete();
+            this.infiniteScroll.disabled = false;
             console.log('Pokemons loaded');
           });
         },

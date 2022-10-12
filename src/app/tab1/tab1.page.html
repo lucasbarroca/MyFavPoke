@@ -4,9 +4,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" [scrollY]="pokemons.length">
   <!-- Results grid -->
-  <ion-grid *ngIf="pokemons" fixed="false">
+  <ion-grid *ngIf="pokemons.length" fixed="false">
     <ion-row>
       <ion-col
         *ngFor="let pokemon of pokemons; let i = index"
@@ -37,8 +37,8 @@
                 <ion-col size="8" class="ion-no-padding ion-padding-end">
                   <ion-text>Description goes here</ion-text>
                 </ion-col>
-                <ion-col size="4" class="ion-no-padding">
-                  <img [src]="pokemon.imageUrl" height="128" />
+                <ion-col size="4" class="ion-no-padding ion-text-end">
+                  <img [src]="pokemon.imageUrl" height="96" />
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -48,7 +48,71 @@
     </ion-row>
   </ion-grid>
 
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+  <!-- Skeleton Results grid -->
+  <ion-grid *ngIf="!pokemons.length" fixed="false">
+    <ion-row>
+      <ion-col
+        *ngFor="let fakePokemon of fakePokemons; let i = index"
+        size="12"
+        size-sm="6"
+        size-md="4"
+        size-xl="4"
+      >
+        <ion-card>
+          <ion-item>
+            <ion-label
+              ><ion-skeleton-text
+                [animated]="true"
+                style="width: 70%"
+              ></ion-skeleton-text
+            ></ion-label>
+          </ion-item>
+
+          <ion-card-content>
+            <ion-grid class="ion-no-padding">
+              <ion-row class="ion-no-padding">
+                <ion-col size="8" class="ion-no-padding ion-padding-end">
+                  <ion-skeleton-text
+                    [animated]="true"
+                    style="width: 75%"
+                  ></ion-skeleton-text>
+                  <ion-skeleton-text
+                    [animated]="true"
+                    style="width: 85%"
+                  ></ion-skeleton-text>
+                  <ion-skeleton-text
+                    [animated]="true"
+                    style="width: 80%"
+                  ></ion-skeleton-text>
+                  <ion-skeleton-text
+                    [animated]="true"
+                    style="width: 70%"
+                  ></ion-skeleton-text>
+                  <ion-skeleton-text
+                    [animated]="true"
+                    style="width: 80%"
+                  ></ion-skeleton-text>
+                </ion-col>
+                <ion-col size="4" class="ion-no-padding">
+                  <ion-skeleton-text
+                    [animated]="true"
+                    style="width: 100%; height: 100px"
+                  ></ion-skeleton-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Infinite Scroll -->
+  <ion-infinite-scroll
+    threshold="100px"
+    (ionInfinite)="loadMore($event)"
+    disabled="true"
+  >
     <ion-infinite-scroll-content
       loadingSpinner="circular"
       loadingText="Carregando..."
