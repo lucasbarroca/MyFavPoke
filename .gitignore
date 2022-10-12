@@ -32,3 +32,5 @@ npm-debug.log*
 /plugins
 /www
 *.code-workspace
+
+resources/android/**/*
