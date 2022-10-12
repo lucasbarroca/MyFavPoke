@@ -3,4 +3,10 @@ export interface PokemonListItem {
   name: string;
   imageUrl: string;
   favorite: boolean;
+  types: string[];
+  stats: {
+    hp: number;
+    attack: number;
+    defense: number;
+  };
 }

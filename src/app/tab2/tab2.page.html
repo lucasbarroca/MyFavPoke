@@ -1,6 +1,14 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Favoritos </ion-title>
+    <ion-title slot="start"> Favoritos </ion-title>
+    <ion-title *ngIf="listLoaded && pokemons.length" slot="end"
+      ><ion-badge *ngIf="favoritesTotal" color="medium"
+        >{{favoritesTotal}}</ion-badge
+      ></ion-title
+    >
+    <ion-title *ngIf="!listLoaded" slot="end"
+      ><ion-skeleton-text color="medium"></ion-skeleton-text
+    ></ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -47,8 +55,42 @@
             <ion-grid class="ion-no-padding">
               <ion-row class="ion-no-padding">
                 <ion-col size="8" class="ion-no-padding ion-padding-end">
-                  <ion-text>Description goes here</ion-text>
+                  <!-- Info -->
+                  <ion-row style="height: 48px; align-items: flex-start"
+                    ><ion-col size="12">
+                      <ion-badge
+                        *ngFor="let type of pokemon.types"
+                        color="medium"
+                        class="ion-margin-end type type-{{type}}"
+                        >{{type}}</ion-badge
+                      >
+                    </ion-col></ion-row
+                  >
+
+                  <!-- Stats -->
+                  <ion-row style="height: 48px; align-items: flex-end"
+                    ><ion-col size="12"
+                      ><ion-row>
+                        <ion-col size="4"> <strong>HP</strong> </ion-col>
+                        <ion-col size="4"> <strong>Att</strong> </ion-col>
+                        <ion-col size="4"> <strong>Def</strong> </ion-col>
+                      </ion-row>
+                      <ion-row>
+                        <ion-col size="4"
+                          ><h1>{{pokemon.stats.hp}}</h1>
+                        </ion-col>
+                        <ion-col size="4">
+                          <h1>{{pokemon.stats.attack}}</h1></ion-col
+                        >
+                        <ion-col size="4">
+                          <h1>{{pokemon.stats.defense}}</h1>
+                        </ion-col>
+                      </ion-row>
+                    </ion-col></ion-row
+                  >
                 </ion-col>
+
+                <!-- Image -->
                 <ion-col size="4" class="ion-no-padding ion-text-end">
                   <img [src]="pokemon.imageUrl" height="96" />
                 </ion-col>

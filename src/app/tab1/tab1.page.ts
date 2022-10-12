@@ -20,6 +20,7 @@ export class Tab1Page implements OnInit {
   ) {}
 
   pokemons: PokemonListItem[] = [];
+  pokedexTotal;
   fakePokemons = [];
   itemsPerPage = 12;
   currentPage = 1;
@@ -64,6 +65,7 @@ export class Tab1Page implements OnInit {
               this.infiniteScroll.disabled = false;
             }
 
+            this.pokedexTotal = this.pokeApi.getPokemonsCount();
             console.log('Pokemons loaded');
           });
         },

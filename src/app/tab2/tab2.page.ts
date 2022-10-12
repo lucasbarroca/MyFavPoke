@@ -20,6 +20,7 @@ export class Tab2Page implements OnInit {
 
   listLoaded = false;
   pokemons: PokemonListItem[] = [];
+  favoritesTotal;
   fakePokemons = [];
   itemsPerPage = 12;
   currentPage = 1;
@@ -68,6 +69,7 @@ export class Tab2Page implements OnInit {
         this.infiniteScroll.disabled = false;
       }
 
+      this.favoritesTotal = this.favList.getPokemonsCount();
       this.listLoaded = true;
       console.log('Pokemons loaded');
     });

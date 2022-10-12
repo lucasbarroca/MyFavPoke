@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { Pokemon } from '../types/pokemon';
 import { PokemonListItem } from '../types/pokemon-list-item';
 import { FavoriteListService } from './favorite-list.service';
@@ -51,6 +52,12 @@ export class PokemonListingService {
             name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
             imageUrl: this.getImageUrl(data),
             favorite: this.favList.isFavorite(data.id),
+            types: this.getPokemonTypes(data),
+            stats: {
+              hp: this.getPokemonStat(data, 'hp'),
+              attack: this.getPokemonStat(data, 'attack'),
+              defense: this.getPokemonStat(data, 'defense'),
+            },
           };
 
           resolve(pokemon);
@@ -58,6 +65,14 @@ export class PokemonListingService {
     });
 
     return promise;
+  }
+
+  private getPokemonTypes(pokemon: Pokemon) {
+    return pokemon.types.map((p) => p.type.name);
+  }
+
+  private getPokemonStat(pokemon: Pokemon, statName: string) {
+    return pokemon.stats.filter((s) => s.stat.name === statName)[0].base_stat;
   }
 
   private getImageUrl(pokemon: Pokemon) {
