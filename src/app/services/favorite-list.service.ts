@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class FavoriteListService {
-  public items: number[];
+  items: number[];
 
   constructor() {}
 
@@ -14,6 +14,7 @@ export class FavoriteListService {
     }
 
     this.items.push(id);
+    this.items.sort((a, b) => a - b);
     this.saveList();
   }
 
@@ -23,6 +24,7 @@ export class FavoriteListService {
     }
 
     this.items = this.items.filter((i) => i != id);
+    this.items.sort((a, b) => a - b);
     this.saveList();
   }
 
@@ -49,5 +51,21 @@ export class FavoriteListService {
     }
 
     return this.items.includes(id);
+  }
+
+  getPokemonsList(limit: number, offset = 0) {
+    if (!this.items) {
+      this.loadList();
+    }
+
+    return this.items.slice(offset, offset + limit);
+  }
+
+  getPokemonsCount() {
+    if (!this.items) {
+      this.loadList();
+    }
+
+    return this.items.length;
   }
 }
