@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonInfiniteScroll } from '@ionic/angular';
 import { FavoriteListService } from '../services/favorite-list.service';
 import { PokeApiService } from '../services/poke-api.service';
 import { PokemonListingService } from '../services/pokemon-listing.service';
-import { NamedAPIResourceList } from '../types/named-apiresource-list';
 
 @Component({
   selector: 'app-tab1',
@@ -10,6 +10,8 @@ import { NamedAPIResourceList } from '../types/named-apiresource-list';
   styleUrls: ['tab1.page.scss'],
 })
 export class Tab1Page implements OnInit {
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+
   constructor(
     private pokeApi: PokeApiService,
     private pokeList: PokemonListingService,
@@ -37,9 +39,27 @@ export class Tab1Page implements OnInit {
             this.pokeList.addPokemon(result.name);
           });
 
+          this.infiniteScroll.complete();
           console.log('Pokemons loaded');
         },
       });
+  }
+
+  loadMore(event) {
+    let maxPages = Math.ceil(
+      this.pokeApi.getPokemonsCount() / this.itemsPerPage
+    );
+
+    if (this.currentPage >= maxPages) {
+      return;
+    }
+
+    this.currentPage++;
+    this.loadPokemons();
+
+    if (this.currentPage >= maxPages) {
+      event.target.disabled = true;
+    }
   }
 
   toggleFavorite(index: number) {

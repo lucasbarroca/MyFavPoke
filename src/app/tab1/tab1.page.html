@@ -1,8 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Pokémons
-    </ion-title>
+    <ion-title> Pokémons </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,7 +8,13 @@
   <!-- Results grid -->
   <ion-grid *ngIf="pokemons" fixed="false">
     <ion-row>
-      <ion-col *ngFor="let pokemon of pokemons; let i = index" size="12" size-sm="6" size-md="4" size-xl="4">
+      <ion-col
+        *ngFor="let pokemon of pokemons; let i = index"
+        size="12"
+        size-sm="6"
+        size-md="4"
+        size-xl="4"
+      >
         <ion-card>
           <ion-item>
             <ion-label>No. {{pokemon.id}}</ion-label>
@@ -18,7 +22,11 @@
 
             <ion-buttons slot="end">
               <ion-button (click)="toggleFavorite(i)">
-                <ion-icon name="heart" [color]="pokemon.favorite ? 'danger' : null" slot="icon-only"></ion-icon>
+                <ion-icon
+                  name="heart"
+                  [color]="pokemon.favorite ? 'danger' : null"
+                  slot="icon-only"
+                ></ion-icon>
               </ion-button>
             </ion-buttons>
           </ion-item>
@@ -30,7 +38,7 @@
                   <ion-text>Description goes here</ion-text>
                 </ion-col>
                 <ion-col size="4" class="ion-no-padding">
-                  <img [src]="pokemon.imageUrl" height="128"/>
+                  <img [src]="pokemon.imageUrl" height="128" />
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -40,4 +48,11 @@
     </ion-row>
   </ion-grid>
 
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="circular"
+      loadingText="Carregando..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

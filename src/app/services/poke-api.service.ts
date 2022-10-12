@@ -17,6 +17,7 @@ export class PokeApiService {
   });
 
   CachedFullPokemonsList: Observable<NamedAPIResourceList>;
+  cachedPokemonsCount: number;
 
   constructor(private httpClient: HttpClient) {}
 
@@ -37,6 +38,19 @@ export class PokeApiService {
   // Id can be either a number or a name
   getPokemon(id: string) {
     return this.get<Pokemon>(`pokemon/${id}`);
+  }
+
+  getPokemonsCount() {
+    if (!this.cachedPokemonsCount) {
+      this.cachedPokemonsCount = 100000;
+      this.getPokemonsList(1, 0).subscribe({
+        next: (data) => {
+          this.cachedPokemonsCount = data.count;
+        },
+      });
+    }
+
+    return this.cachedPokemonsCount;
   }
 
   get<type>(endpoint): Observable<type> {
