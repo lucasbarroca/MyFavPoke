@@ -84,5 +84,6 @@ export class Tab2Page implements OnInit {
   removeFavorite(id: number, index: number) {
     this.favList.removeFavorite(id);
     this.pokemons.splice(index, 1);
+    this.favoritesTotal--;
   }
 }
