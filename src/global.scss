@@ -16,7 +16,7 @@
 @import "~@ionic/angular/css/normalize.css";
 @import "~@ionic/angular/css/structure.css";
 @import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
+@import "~@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "~@ionic/angular/css/padding.css";
@@ -24,3 +24,92 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+.stat-icon {
+  font-size: 22px;
+}
+
+.type {
+  padding: 6px 10px;
+}
+
+.type-normal {
+  color: #222;
+  background-color: #a8a77a;
+}
+.type-fighting {
+  color: #fff;
+  background-color: #c22e28;
+}
+.type-flying {
+  color: #222;
+  background-color: #a98ff3;
+}
+.type-poison {
+  color: #fff;
+  background-color: #a33ea1;
+}
+.type-ground {
+  color: #222;
+  background-color: #e2bf65;
+}
+.type-rock {
+  color: #222;
+  background-color: #b6a136;
+}
+.type-bug {
+  color: #222;
+  background-color: #a6b91a;
+}
+.type-ghost {
+  color: #fff;
+  background-color: #735797;
+}
+.type-steel {
+  color: #222;
+  background-color: #b7b7ce;
+}
+.type-fire {
+  color: #222;
+  background-color: #ee8130;
+}
+.type-water {
+  color: #222;
+  background-color: #6390f0;
+}
+.type-grass {
+  color: #222;
+  background-color: #7ac74c;
+}
+.type-electric {
+  color: #222;
+  background-color: #f7d02c;
+}
+.type-psychic {
+  color: #222;
+  background-color: #f95587;
+}
+.type-ice {
+  color: #222;
+  background-color: #96d9d6;
+}
+.type-dragon {
+  color: #fff;
+  background-color: #6f35fc;
+}
+.type-dark {
+  color: #fff;
+  background-color: #705746;
+}
+.type-fairy {
+  color: #222;
+  background-color: #d685ad;
+}
+.type-unknown {
+  color: #fff;
+  background-color: #222;
+}
+.type-shadow {
+  color: #fff;
+  background-color: #111;
+}
