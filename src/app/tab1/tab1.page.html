@@ -55,7 +55,7 @@
             <ion-buttons slot="end">
               <ion-button (click)="toggleFavorite(i)">
                 <ion-icon
-                  name="heart"
+                  [name]="pokemon.favorite ? 'heart' : 'heart-outline'"
                   [color]="pokemon.favorite ? 'danger' : null"
                   slot="icon-only"
                 ></ion-icon>
