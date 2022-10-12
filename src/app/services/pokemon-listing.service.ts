@@ -8,38 +8,32 @@ import { PokeApiService } from './poke-api.service';
   providedIn: 'root',
 })
 export class PokemonListingService {
-  public items: PokemonListItem[] = [];
-
   constructor(
     private pokeApi: PokeApiService,
     private favList: FavoriteListService
   ) {}
 
-  getItems() {
-    return this.items;
-  }
-
-  addPokemon(name: string) {
+  addPokemon(id: string | number, list: PokemonListItem[]) {
     return new Promise<Boolean>((resolve) => {
-      this.loadPokemon(name).then((pokemon) => {
-        this.items.push(pokemon);
+      this.loadPokemon(id.toString()).then((pokemon) => {
+        list.push(pokemon);
         console.log('Pokemon added to list', pokemon);
         resolve(true);
       });
     });
   }
 
-  async addPokemons(names: string[]) {
+  addPokemons(ids: string[] | number[], list: PokemonListItem[]) {
     let promises = [];
 
-    names.forEach((name) => {
-      promises.push(this.loadPokemon(name));
+    ids.forEach((id: string | number) => {
+      promises.push(this.loadPokemon(id.toString()));
     });
 
     return new Promise<Boolean>((resolve) => {
       Promise.all<PokemonListItem[]>(promises).then((pokemons) => {
         pokemons.sort((a, b) => 0 - (a.id < b.id ? 1 : -1));
-        this.items.push(...pokemons);
+        list.push(...pokemons);
         console.log('Pokemons added to list', pokemons);
         resolve(true);
       });
