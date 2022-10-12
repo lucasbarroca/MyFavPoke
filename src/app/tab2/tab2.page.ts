@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonInfiniteScroll } from '@ionic/angular';
 import { FavoriteListService } from '../services/favorite-list.service';
-import { PokeApiService } from '../services/poke-api.service';
 import { PokemonListingService } from '../services/pokemon-listing.service';
 import { PokemonListItem } from '../types/pokemon-list-item';
 
