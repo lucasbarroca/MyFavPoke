@@ -1,10 +1,8 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title slot="start"> Favoritos </ion-title>
-    <ion-title *ngIf="listLoaded && pokemons.length" slot="end"
-      ><ion-badge *ngIf="favoritesTotal" color="medium"
-        >{{favoritesTotal}}</ion-badge
-      ></ion-title
+    <ion-title *ngIf="listLoaded" slot="end"
+      ><ion-badge color="medium">{{favoritesTotal}}</ion-badge></ion-title
     >
     <ion-title *ngIf="!listLoaded" slot="end"
       ><ion-skeleton-text color="medium"></ion-skeleton-text
@@ -14,13 +12,23 @@
 
 <ion-content [fullscreen]="true" [scrollY]="pokemons.length">
   <!-- Nothing found -->
-  <ion-row *ngIf="listLoaded && !pokemons.length">
+  <ion-row
+    *ngIf="listLoaded && !pokemons.length"
+    class="ion-text-center ion-align-items-end"
+    style="height: 50%"
+  >
     <ion-col size="12" class="ion-padding">
-      <ion-label size="large"
-        >Você ainda não adicionou nenhum pokémon como favorito.</ion-label
-      >
+      <h1>Nada por aqui.</h1>
+      <p>Você ainda não adicionou nenhum pokémon como favorito.</p>
     </ion-col>
-    <ion-col size="12" class="ion-padding ion-text-center">
+  </ion-row>
+
+  <ion-row
+    *ngIf="listLoaded && !pokemons.length"
+    class="ion-text-center ion-align-items-start"
+    style="height: 50%"
+  >
+    <ion-col size="12" class="ion-padding">
       <ion-button [routerLink]="['/','app','pokedex']">
         Veja todos os pokémons
       </ion-button>

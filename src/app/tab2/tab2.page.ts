@@ -20,7 +20,7 @@ export class Tab2Page implements OnInit {
 
   listLoaded = false;
   pokemons: PokemonListItem[] = [];
-  favoritesTotal;
+  favoritesTotal = 0;
   fakePokemons = [];
   itemsPerPage = 12;
   currentPage = 1;
@@ -35,6 +35,7 @@ export class Tab2Page implements OnInit {
   ionViewWillEnter() {
     console.log('Loading pokemons...');
     this.listLoaded = false;
+    this.favoritesTotal = 0;
     this.pokemons = [];
     this.currentPage = 1;
     this.loadPokemons();
