@@ -35,12 +35,11 @@ export class Tab1Page implements OnInit {
       )
       .subscribe({
         next: (data) => {
-          data.results.forEach((result) => {
-            this.pokeList.addPokemon(result.name);
+          let nextPokes = data.results.map((p) => p.name);
+          this.pokeList.addPokemons(nextPokes).then(() => {
+            this.infiniteScroll.complete();
+            console.log('Pokemons loaded');
           });
-
-          this.infiniteScroll.complete();
-          console.log('Pokemons loaded');
         },
       });
   }

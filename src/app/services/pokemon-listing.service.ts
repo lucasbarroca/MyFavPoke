@@ -20,26 +20,50 @@ export class PokemonListingService {
   }
 
   addPokemon(name: string) {
-    this.pokeApi.getPokemon(name).subscribe({
-      next: (data) => {
-        let pokemon = {
-          id: data.id,
-          name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
-          imageUrl: this.getImageUrl(data),
-          favorite: this.favList.isFavorite(data.id),
-        };
-
+    return new Promise<Boolean>((resolve) => {
+      this.loadPokemon(name).then((pokemon) => {
         this.items.push(pokemon);
-
         console.log('Pokemon added to list', pokemon);
-      },
+        resolve(true);
+      });
     });
   }
 
-  addPokemons(names: string[]) {
+  async addPokemons(names: string[]) {
+    let promises = [];
+
     names.forEach((name) => {
-      this.addPokemon(name);
+      promises.push(this.loadPokemon(name));
     });
+
+    return new Promise<Boolean>((resolve) => {
+      Promise.all<PokemonListItem[]>(promises).then((pokemons) => {
+        pokemons.sort((a, b) => 0 - (a.id < b.id ? 1 : -1));
+        this.items.push(...pokemons);
+        console.log('Pokemons added to list', pokemons);
+        resolve(true);
+      });
+    });
+  }
+
+  loadPokemon(name: string) {
+    let promise = new Promise<PokemonListItem>((resolve) => {
+      this.pokeApi
+        .getPokemon(name)
+        .toPromise()
+        .then((data) => {
+          let pokemon = {
+            id: data.id,
+            name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
+            imageUrl: this.getImageUrl(data),
+            favorite: this.favList.isFavorite(data.id),
+          };
+
+          resolve(pokemon);
+        });
+    });
+
+    return promise;
   }
 
   private getImageUrl(pokemon: Pokemon) {
