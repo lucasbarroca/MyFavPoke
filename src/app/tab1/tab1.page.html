@@ -23,6 +23,7 @@
       [debounce]="1000"
       (ionChange)="handleSearchChange($event)"
       (ionCancel)="toggleSearchBar($event)"
+      (ionClear)="reload()"
       showCancelButton="true"
       showClearButton="true"
     ></ion-searchbar>

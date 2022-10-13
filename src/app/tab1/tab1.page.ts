@@ -169,6 +169,11 @@ export class Tab1Page implements OnInit {
           resolve({ ...data, results: results });
         }).then((data: NamedAPIResourceList) => {
           console.log('Search results', data);
+
+          if (!this.ionSearchBar?.value) {
+            return;
+          }
+
           if (data.results.length < 1) {
             this.nothingFound = true;
           }
