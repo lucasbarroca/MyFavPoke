@@ -1,5 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonInfiniteScroll, IonSearchbar } from '@ionic/angular';
+import {
+  IonInfiniteScroll,
+  IonSearchbar,
+  ToastController,
+  ToastOptions,
+} from '@ionic/angular';
 import { FavoriteListService } from '../services/favorite-list.service';
 import { PokeApiService } from '../services/poke-api.service';
 import { PokemonListingService } from '../services/pokemon-listing.service';
@@ -18,7 +23,8 @@ export class Tab1Page implements OnInit {
   constructor(
     private pokeApi: PokeApiService,
     private pokeList: PokemonListingService,
-    private favList: FavoriteListService
+    private favList: FavoriteListService,
+    private toastController: ToastController
   ) {}
 
   showSearch = false;
@@ -96,9 +102,19 @@ export class Tab1Page implements OnInit {
     if (this.favList.isFavorite(pokemon.id)) {
       this.favList.removeFavorite(pokemon.id);
       pokemon.favorite = false;
+      this.presentToast({
+        message: `${pokemon.name} removido dos favoritos`,
+        duration: 1000,
+        position: 'top',
+      });
     } else {
       this.favList.addFavorite(pokemon.id);
       pokemon.favorite = true;
+      this.presentToast({
+        message: `${pokemon.name} adicionado aos favoritos`,
+        duration: 1000,
+        position: 'top',
+      });
     }
   }
 
@@ -159,5 +175,11 @@ export class Tab1Page implements OnInit {
         });
       },
     });
+  }
+
+  async presentToast(options: ToastOptions) {
+    const toast = await this.toastController.create(options);
+
+    await toast.present();
   }
 }

@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonInfiniteScroll } from '@ionic/angular';
+import {
+  IonInfiniteScroll,
+  ToastController,
+  ToastOptions,
+} from '@ionic/angular';
 import { FavoriteListService } from '../services/favorite-list.service';
 import { PokemonListingService } from '../services/pokemon-listing.service';
 import { PokemonListItem } from '../types/pokemon-list-item';
@@ -14,7 +18,8 @@ export class Tab2Page implements OnInit {
 
   constructor(
     private pokeList: PokemonListingService,
-    private favList: FavoriteListService
+    private favList: FavoriteListService,
+    private toastController: ToastController
   ) {}
 
   listLoaded = false;
@@ -80,7 +85,29 @@ export class Tab2Page implements OnInit {
 
   removeFavorite(id: number, index: number) {
     this.favList.removeFavorite(id);
-    this.pokemons.splice(index, 1);
+    let pokemon = this.pokemons.splice(index, 1)[0];
     this.favoritesTotal--;
+
+    this.presentToast({
+      message: `${pokemon.name} removido dos favoritos`,
+      duration: 2000,
+      buttons: [
+        {
+          text: 'Desfazer',
+          role: 'undo',
+          handler: () => {
+            this.favList.addFavorite(id);
+            this.pokemons.splice(index, 0, pokemon);
+            this.favoritesTotal++;
+          },
+        },
+      ],
+    });
+  }
+
+  async presentToast(options: ToastOptions) {
+    const toast = await this.toastController.create(options);
+
+    await toast.present();
   }
 }
