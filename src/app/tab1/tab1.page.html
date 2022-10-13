@@ -38,6 +38,25 @@
     </ion-col>
   </ion-row>
 
+  <!-- Results count -->
+  <ion-row
+    *ngIf="!nothingFound && showSearch"
+    class="ion-text-center ion-align-items-start"
+  >
+    <ion-col *ngIf="filteredPokemons" size="12" class="ion-padding-top">
+      <strong>{{filteredPokemons?.results?.length}}</strong> resultados
+      encontrados
+    </ion-col>
+    <ion-col
+      *ngIf="!filteredPokemons"
+      size="12"
+      class="ion-padding-top"
+      style="padding-right: 20%; padding-left: 20%"
+    >
+      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+    </ion-col>
+  </ion-row>
+
   <!-- Results grid -->
   <ion-grid *ngIf="pokemons.length && !nothingFound" fixed="false">
     <ion-row>
