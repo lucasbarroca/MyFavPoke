@@ -1,5 +1,6 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <!-- Main toolbar -->
+  <ion-toolbar *ngIf="!showSearch">
     <ion-title>
       <ion-text class="ion-margin-end">Pokédex</ion-text>
       <ion-badge *ngIf="pokemons.length || nothingFound" color="medium"
@@ -12,23 +13,23 @@
         ><ion-icon name="search"></ion-icon></ion-button
     ></ion-buttons>
   </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true" [scrollY]="pokemons.length">
   <!-- Search bar -->
-  <div
-    *ngIf="showSearch"
-    class="ion-padding-start ion-padding-end ion-padding-top"
-  >
+  <ion-toolbar *ngIf="showSearch">
     <ion-searchbar
+      *ngIf="showSearch"
       animated="true"
       placeholder="Pesquisar"
       [debounce]="1000"
       (ionChange)="handleSearchChange($event)"
-      (ionBlur)="searchBlur($event)"
+      (ionCancel)="toggleSearchBar($event)"
+      showCancelButton="true"
+      showClearButton="true"
     ></ion-searchbar>
-  </div>
+  </ion-toolbar>
+</ion-header>
 
+<ion-content [fullscreen]="true" [scrollY]="pokemons.length">
   <!-- Nothing found -->
   <ion-row *ngIf="nothingFound" class="ion-text-center ion-align-items-start">
     <ion-col size="12" class="ion-padding">

@@ -141,14 +141,6 @@ export class Tab1Page implements OnInit {
     }, 200);
   }
 
-  searchBlur(event) {
-    if (!event.target.value) {
-      setTimeout(() => {
-        this.showSearch = false;
-      }, 500);
-    }
-  }
-
   async handleSearchChange(event) {
     const query = event.target.value.toLowerCase();
     console.log('Searching for', query);
