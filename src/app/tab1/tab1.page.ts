@@ -122,12 +122,23 @@ export class Tab1Page implements OnInit {
     this.showSearch = !this.showSearch;
 
     if (!this.showSearch) {
-      this.reload();
+      if (this.ionSearchBar.value.length > 0) {
+        this.reload();
+      }
     } else {
-      setTimeout(() => {
-        this.ionSearchBar.setFocus();
-      }, 500);
+      this.searchBarFocus();
     }
+  }
+
+  async searchBarFocus() {
+    setTimeout(() => {
+      if (this.ionSearchBar) {
+        this.ionSearchBar.setFocus();
+      } else {
+        this.showSearch = true;
+        this.searchBarFocus();
+      }
+    }, 200);
   }
 
   searchBlur(event) {
